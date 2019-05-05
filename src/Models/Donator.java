@@ -1,28 +1,19 @@
 package Models;
 
 public class Donator extends FeedexObjectWithLocation {
-    private FoodType content;
-    private int donationAmount;
 
-    public FoodType getContent() {
-        return content;
+    public Donation donation;
+
+    public Donation getDonation() {
+        return donation;
     }
 
-    public void setContent(FoodType content) {
-        this.content = content;
+    public void setDonation(Donation donation) {
+        this.donation = donation;
     }
 
-    public int getDonationAmount() {
-        return donationAmount;
-    }
+    public Donator(String name) {
+        super(name);
 
-    public void setDonationAmount(int donationAmount) {
-        this.donationAmount = donationAmount;
-    }
-
-
-    protected Donator(FoodType content, int donationAmount) {
-        this.content = content;
-        this.donationAmount = donationAmount;
     }
 }

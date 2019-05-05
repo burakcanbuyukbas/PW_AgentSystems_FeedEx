@@ -5,8 +5,9 @@ import java.util.Random;
 public class FeedexObjectWithLocation {
 
 
-    protected FeedexObjectWithLocation() {
+    protected FeedexObjectWithLocation(String name) {
         Random rnd = new Random();
+        this.Name = name;
         this.x = rnd.nextInt(100);
         this.y = rnd.nextInt(100);
     }

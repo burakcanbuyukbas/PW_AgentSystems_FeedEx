@@ -1,5 +1,6 @@
 package Models;
 
+import Behaviours.CourierBehaviour;
 import Behaviours.DonatorBehaviour;
 import jade.core.Agent;
 
@@ -8,7 +9,7 @@ import java.io.IOException;
 public class CourierAgent extends Agent {
 
     public CourierAgent(CourierType type) {
-        this.courier = new FeedexObjectWithLocation();
+        this.courier = new FeedexObjectWithLocation(type.getName());
         this.type = type;
     }
 
@@ -52,7 +53,7 @@ public class CourierAgent extends Agent {
     public void setup()
     {
         try {
-            addBehaviour( new DonatorBehaviour(this) );
+            addBehaviour( new CourierBehaviour(this) );
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,16 +1,9 @@
 package Models;
 
 public class FeedexCenter extends FeedexObjectWithLocation {
-    private FoodType content;
     private int capacity;
 
-    public FoodType getContent() {
-        return content;
-    }
 
-    public void setContent(FoodType content) {
-        this.content = content;
-    }
 
     public int getCapacity() {
         return capacity;
@@ -21,8 +14,8 @@ public class FeedexCenter extends FeedexObjectWithLocation {
     }
 
 
-    protected FeedexCenter(FoodType content, int capacity) {
-        this.content = content;
+    protected FeedexCenter(String name, int capacity) {
+        super(name);
         this.capacity = capacity;
     }
 }

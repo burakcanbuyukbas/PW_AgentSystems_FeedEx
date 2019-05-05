@@ -7,24 +7,24 @@ import java.io.IOException;
 
 public class DonatorAgent extends Agent {
 
-    private FeedexObjectWithLocation donator;
+    private Donator donator;
 
-    public FeedexObjectWithLocation getDonator() {
+    public Donator getDonator() {
         return donator;
     }
 
-    public void setDonator(FeedexObjectWithLocation donator) {
+    public void setDonator(Donator donator) {
         this.donator = donator;
     }
 
-    public DonatorAgent(FoodType content, int amount) {
-        this.donator = new Donator(content, amount);
+    public DonatorAgent(String name) {
+        this.donator = new Donator(name);
     }
 
     public void setup()
     {
         try {
-            addBehaviour( new DonatorBehaviour(this) );
+            addBehaviour( new DonatorBehaviour(this, donator.getDonation()) );
         } catch (IOException e) {
             e.printStackTrace();
         }
