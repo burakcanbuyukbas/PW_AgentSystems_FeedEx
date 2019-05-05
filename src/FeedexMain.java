@@ -51,38 +51,36 @@ public class FeedexMain {
         System.out.println( f1.getFeedexCenter().getName() + " -- Location: (" + f1.getFeedexCenter().getX() + ", " + f1.getFeedexCenter().getX() + ")");
         System.out.println( f2.getFeedexCenter().getName() + " -- Location: (" + f2.getFeedexCenter().getX() + ", " + f2.getFeedexCenter().getX() + ")");
 
-        startMainContainer("127.0.0.1", Profile.LOCAL_PORT, "mainContainer");
+        startMainContainer();
         System.out.println( "Main container started.");
-        addAgent(containerController, "Bike 1", CourierAgent.class.getName(), null );
-        addAgent(containerController, "Bike 2", CourierAgent.class.getName(), null );
-        addAgent(containerController, "Car 1", CourierAgent.class.getName(), null );
-        addAgent(containerController, "Truck 1", CourierAgent.class.getName(), null );
+        try {
+            AgentController ag = containerController.acceptNewAgent("Bike 1", c1);
+            ag = containerController.acceptNewAgent("Bike 2", c2);
+            ag = containerController.acceptNewAgent("Car 1", c3);
+            ag = containerController.acceptNewAgent("Truck 1", c4);
 
-        addAgent(containerController, "Cafe 1", DonatorAgent.class.getName(), null );
-        addAgent(containerController, "Restaurant 1", DonatorAgent.class.getName(), null );
-        addAgent(containerController, "Restaurant 2", DonatorAgent.class.getName(), null );
+            ag = containerController.acceptNewAgent("Cafe 1", d1);
+            ag = containerController.acceptNewAgent("Restaurant 1", d2);
+            ag = containerController.acceptNewAgent("Restaurant 2", d3);
 
-        addAgent(containerController, "Feed-Ex Center 1", FeedexAgent.class.getName(), null );
-        addAgent(containerController, "Feed-Ex Center 2", FeedexAgent.class.getName(), null );
+            ag = containerController.acceptNewAgent("Feed-Ex Center 1", f1);
+            ag = containerController.acceptNewAgent("Feed-Ex Center 2", f2);
+            System.out.println( "Agents added.");
 
+
+            ag.start();
+        } catch (StaleProxyException e) {
+            e.printStackTrace();
+        }
     }
 
-    static void startMainContainer(String host, String port, String name) {
+    static void startMainContainer() {
         jade.core.Runtime runtime = jade.core.Runtime.instance();
         Profile profile = new ProfileImpl();
-        profile.setParameter(Profile.MAIN_HOST, host);
-        profile.setParameter(Profile.MAIN_PORT, port);
-        profile.setParameter(Profile.PLATFORM_ID, name);
+        profile.setParameter(Profile.CONTAINER_NAME, "MainContainer");
+        profile.setParameter(Profile.MAIN_HOST, "localhost");
 
         containerController = runtime.createMainContainer(profile);
     }
 
-    static void addAgent(ContainerController cc, String agent, String classe, Object[] args) {
-        try {
-            agentController = cc.createNewAgent(agent, classe, args);
-            agentController.start();
-        } catch (StaleProxyException s) {
-            s.printStackTrace();
-        }
-    }
 }
