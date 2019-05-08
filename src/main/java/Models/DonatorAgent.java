@@ -21,6 +21,7 @@ public class DonatorAgent extends Agent {
         this.donator = new Donator(name);
     }
 
+
     public void setup()
     {
         try {

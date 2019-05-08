@@ -54,24 +54,38 @@ public class FeedexMain {
         startMainContainer();
         System.out.println( "Main container started.");
         try {
-            AgentController ag = containerController.acceptNewAgent("Bike 1", c1);
-            ag = containerController.acceptNewAgent("Bike 2", c2);
-            ag = containerController.acceptNewAgent("Car 1", c3);
-            ag = containerController.acceptNewAgent("Truck 1", c4);
+            AgentController ag1, ag2, ag3, ag4, ag5, ag6, ag7, ag8, ag9;
+            ag1 = containerController.acceptNewAgent("Bike 1", c1);
+            ag2 = containerController.acceptNewAgent("Bike 2", c2);
+            ag3 = containerController.acceptNewAgent("Car 1", c3);
+            ag4 = containerController.acceptNewAgent("Truck 1", c4);
 
-            ag = containerController.acceptNewAgent("Cafe 1", d1);
-            ag = containerController.acceptNewAgent("Restaurant 1", d2);
-            ag = containerController.acceptNewAgent("Restaurant 2", d3);
+            ag5 = containerController.acceptNewAgent("Cafe 1", d1);
+            ag6 = containerController.acceptNewAgent("Restaurant 1", d2);
+            ag7 = containerController.acceptNewAgent("Restaurant 2", d3);
 
-            ag = containerController.acceptNewAgent("Feed-Ex Center 1", f1);
-            ag = containerController.acceptNewAgent("Feed-Ex Center 2", f2);
+            ag8 = containerController.acceptNewAgent("Feed-Ex Center 1", f1);
+            ag9 = containerController.acceptNewAgent("Feed-Ex Center 2", f2);
             System.out.println( "Agents added.");
 
 
-            ag.start();
+            ag1.start();
+            ag2.start();
+            ag3.start();
+            ag4.start();
+
+            ag8.start();
+            ag9.start();
+
+            ag5.start();
+            ag6.start();
+            ag7.start();
+
         } catch (StaleProxyException e) {
             e.printStackTrace();
         }
+
+
     }
 
     static void startMainContainer() {

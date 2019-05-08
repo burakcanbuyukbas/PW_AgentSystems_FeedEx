@@ -8,7 +8,6 @@ public class Donation {
     public FoodType getContent() {
         return content;
     }
-
     public void setContent(FoodType content) {
         this.content = content;
     }
