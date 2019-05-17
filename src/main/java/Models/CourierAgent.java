@@ -53,7 +53,7 @@ public class CourierAgent extends Agent {
     public void setup()
     {
         try {
-            addBehaviour( new CourierBehaviour(this) );
+            addBehaviour( new CourierBehaviour(this, type) );
         } catch (IOException e) {
             e.printStackTrace();
         }

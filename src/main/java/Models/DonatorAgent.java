@@ -25,7 +25,7 @@ public class DonatorAgent extends Agent {
     public void setup()
     {
         try {
-            addBehaviour( new DonatorBehaviour(this, donator.getDonation()) );
+            addBehaviour( new DonatorBehaviour(this, donator) );
         } catch (IOException e) {
             e.printStackTrace();
         }

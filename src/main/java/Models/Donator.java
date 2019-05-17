@@ -16,4 +16,10 @@ public class Donator extends FeedexObjectWithLocation {
         super(name);
 
     }
+
+
+    public Donator() {
+        super();
+
+    }
 }

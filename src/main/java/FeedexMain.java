@@ -24,9 +24,6 @@ public class FeedexMain {
     public static void main(String[] args){
 
 
-
-
-
         CourierAgent c1 = new CourierAgent(new Bike("Bike 1"));
         CourierAgent c2 = new CourierAgent(new Bike("Bike 2"));
         CourierAgent c3 = new CourierAgent(new Car("Car 1"));

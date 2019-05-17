@@ -4,6 +4,15 @@ public class Donation {
 
     private FoodType content;
     private int amount;
+    private Donator donator;
+
+    public Donator getDonator() {
+        return donator;
+    }
+
+    public void setDonator(Donator donator) {
+        this.donator = donator;
+    }
 
     public FoodType getContent() {
         return content;
@@ -18,6 +27,9 @@ public class Donation {
 
     public void setDonationAmount(int donationAmount) {
         this.amount = donationAmount;
+    }
+
+    public Donation() {
     }
 
     public Donation(FoodType content, int amount) {

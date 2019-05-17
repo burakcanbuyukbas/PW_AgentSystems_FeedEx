@@ -9,6 +9,6 @@ public class Bike extends CourierType {
 
     @Override
     public int getPayload() {
-        return 2;
+        return 3;
     }
 }

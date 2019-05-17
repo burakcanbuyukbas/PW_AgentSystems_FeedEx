@@ -3,6 +3,7 @@ import Models.Donation;
 import Models.DonationContents.Leftover;
 import Models.DonationContents.Meat;
 import Models.DonationContents.Vegetable;
+import Models.Donator;
 import Models.DonatorAgent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -18,6 +19,7 @@ import javax.swing.text.AbstractDocument;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import com.fasterxml.jackson.core.*;
@@ -26,12 +28,17 @@ public class DonatorBehaviour extends SimpleBehaviour {
 
     public Agent _agent;
     public Donation _donation;
+    public Donator _donator;
     private int counter= 0;
     private double freq= 0;
+    private int messageCount = 0;
+    private double distance = -1;
+    private boolean donated = false;
+    AID bestOffer;
     @Override
     public void action() {
         AMSAgentDescription [] agents = null;
-        List<AMSAgentDescription> centers = null;
+        List<AMSAgentDescription> centers = new ArrayList<AMSAgentDescription>();
 
         freq = (Math.random() * ((10 - 5) + 1)) + 5;
         try {
@@ -46,12 +53,14 @@ public class DonatorBehaviour extends SimpleBehaviour {
 //                        ( agentID.equals( myID ) ? "*** " : "    ")
 //                                + i + ": " + agentID.getName()
 //                );
-                if (agents[i].getName().toString().startsWith("Feed-Ex Center")){
-                    centers.add(agents[i]);
+                if (agents[i].getName().toString().contains("Feed-Ex Center")){
+                    AMSAgentDescription center = agents[i];
+                    centers.add(center);
                 }
             }
-            Donation donation;
 
+            //create a random donation
+            Donation donation;
             Random r = new Random();
             int randomContent = r.nextInt((3 - 1) + 1) + 1;
             int randomAmount= r.nextInt((3 - 1) + 1) + 1;
@@ -100,13 +109,51 @@ public class DonatorBehaviour extends SimpleBehaviour {
                     donation = new Donation(new Leftover(), 0 );
                     contentName = "nothing";
             }
-            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-            ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-            msg.setContentObject(ow.writeValueAsString(donation));
-            myAgent.send(msg);
-            System.out.println(_agent.getName() + ": I want to donate " + donation.getDonationAmount() + " kg of " + contentName);
+            donation.setDonator(_donator);
 
 
+            if (!donated){
+
+
+                ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+                ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+                msg.setContent(ow.writeValueAsString(donation));
+                for (int i = 0; i < centers.size(); i++)
+                    msg.addReceiver( new AID( centers.get(i).getName().getName().split("@")[0], AID.ISLOCALNAME) );
+
+                myAgent.send(msg);
+                System.out.println(_agent.getName() + ": I want to donate " + donation.getDonationAmount() + " kg of " + contentName);
+                donated = true;
+            }
+
+
+
+            //receive replies from centers
+            ACLMessage msgFromCenter = myAgent.receive();
+            if (msgFromCenter!=null) {
+                if (msgFromCenter.getContent().substring(0,2).equals("OIW")){
+                    System.out.println(_agent.getName().split("@")[0] + " waiting for courier "
+                            + msgFromCenter.getContent().split(",")[1] + " in " + msgFromCenter.getContent().split(",")[2] + " minutes.");
+                }
+                else {
+                    double offer = Double.parseDouble(msgFromCenter.getContent());
+                    if (offer < distance || distance == -1) {
+                        System.out.println(myAgent.getName() + ": Your offer(" + offer + ") is better than current match(" + distance + ")");
+                        distance = offer;
+                        bestOffer = msgFromCenter.getSender();
+                    }
+                    messageCount++;
+                    if (messageCount == 2) {
+                        ACLMessage replyToCenter = new ACLMessage(ACLMessage.INFORM);
+                        Donator donator = donation.getDonator();
+                        replyToCenter.setContent("OK," + donation.getDonationAmount() + "," + donator.getX() + "," + donator.getY() + "," + donator.getName().split("@")[0]);
+                        replyToCenter.addReceiver(bestOffer);
+                        myAgent.send(replyToCenter);
+                        System.out.println(myAgent.getName() + ": Best matching is " + bestOffer.getName().split("@")[0] + ". Send a courier pls.");
+                        counter = 10;
+                    }
+                }
+            }
 
 
             counter++;
@@ -128,9 +175,9 @@ public class DonatorBehaviour extends SimpleBehaviour {
         }
     }
     //constructor
-    public DonatorBehaviour(Agent agent, Donation donation) throws IOException {
+    public DonatorBehaviour(Agent agent, Donator donator) throws IOException {
         super(agent);
-        this._donation = donation;
         this._agent = agent;
+        this._donator = donator;
     }
 }

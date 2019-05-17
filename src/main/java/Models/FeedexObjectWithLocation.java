@@ -18,6 +18,10 @@ public class FeedexObjectWithLocation {
 
     private String Name;
 
+    public FeedexObjectWithLocation() {
+
+    }
+
     public int getX() {
         return x;
     }

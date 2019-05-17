@@ -9,14 +9,14 @@ import java.io.IOException;
 public class FeedexAgent extends Agent {
 
 
-    private FeedexObjectWithLocation feedexCenter;
+    private FeedexCenter feedexCenter;
 
 
-    public FeedexObjectWithLocation getFeedexCenter() {
+    public FeedexCenter getFeedexCenter() {
         return feedexCenter;
     }
 
-    public void setFeedexCenter(FeedexObjectWithLocation feedexCenter) {
+    public void setFeedexCenter(FeedexCenter feedexCenter) {
         this.feedexCenter = feedexCenter;
     }
 
@@ -27,7 +27,7 @@ public class FeedexAgent extends Agent {
     public void setup()
     {
         try {
-            addBehaviour( new FeedexBehaviour(this) );
+            addBehaviour( new FeedexBehaviour(this, feedexCenter) );
         } catch (IOException e) {
             e.printStackTrace();
         }
