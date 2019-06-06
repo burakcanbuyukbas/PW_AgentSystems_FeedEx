@@ -8,12 +8,37 @@ import Models.DonationContents.Vegetable;
 import Models.DonatorAgent;
 import Models.CourierAgent;
 import Models.FeedexAgent;
+import com.teamdev.jxbrowser.browser.Browser;
+import javax.swing.*;
+import java.awt.*;
+
+import static com.teamdev.jxbrowser.engine.RenderingMode.HARDWARE_ACCELERATED;
+import com.teamdev.jxbrowser.engine.Engine;
+import com.teamdev.jxbrowser.view.swing.BrowserView;
 import jade.core.Agent;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
+import com.teamdev.jxbrowser.engine.EngineOptions;
+import javafx.embed.swing.JFXPanel;
+import javafx.stage.Stage;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
+import java.net.URL;
 
 public class FeedexMain {
 
@@ -21,7 +46,7 @@ public class FeedexMain {
     static AgentController agentController;
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws InterruptedException {
 
 
         CourierAgent c1 = new CourierAgent(new Bike("Bike 1"));
@@ -81,9 +106,35 @@ public class FeedexMain {
         } catch (StaleProxyException e) {
             e.printStackTrace();
         }
+        //AIzaSyCzsVn9Lz4otxUOB5QPp4anDJ9U6xk8O0E
+        //52.221196, 21.008069
+        //"https://www.google.com/maps/embed/v1/place?q=place_id:ChIJF8u2SOnMHkcR7TrJJ2_WP80&key=AIzaSyCzsVn9Lz4otxUOB5QPp4anDJ9U6xk8O0E";
+        GoogleMapsScene api = GoogleMapsScene.launch(new File("D:\\Users\\Burak\\IdeaProjects\\FeedEx\\src\\main\\java\\map.html"), args);
+
+        JFrame frame = new JFrame("Google Maps");
+
+        JFXPanel fxPanel = new JFXPanel();
+
+        api.attach(fxPanel);
+
+        frame.add(fxPanel);
+        frame.setSize(1300, 820);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        api.addMarker(52.221196, 21.008069, "Bike-1", null, 1);
+        /*api.addMarker(getMapLocation(52.221196, c1.getCourier().getX()), getMapLocation(21.008069, c1.getCourier().getY()), "Bike-1", null, 1);
+        api.addMarker(getMapLocation(52.221196, c2.getCourier().getX()), getMapLocation(21.008069, c2.getCourier().getY()), "Bike-2", null, 1);
+        api.addMarker(getMapLocation(52.221196, c3.getCourier().getX()), getMapLocation(21.008069, c3.getCourier().getY()), "Car-1", null, 2);
+        api.addMarker(getMapLocation(52.221196, c4.getCourier().getX()), getMapLocation(21.008069, c4.getCourier().getY()), "Truck-1", null, 3);
+        api.addMarker(getMapLocation(52.221196, d1.getDonator().getX()), getMapLocation(21.008069, d1.getDonator().getY()), "Bike-1", null, 5);
+        api.addMarker(getMapLocation(52.221196, d2.getDonator().getX()), getMapLocation(21.008069, d2.getDonator().getY()), "Bike-1", null, 5);
+        api.addMarker(getMapLocation(52.221196, d3.getDonator().getX()), getMapLocation(21.008069, d3.getDonator().getY()), "Bike-1", null, 5);
+        api.addMarker(getMapLocation(52.221196, f1.getFeedexCenter().getX()), getMapLocation(21.008069, f1.getFeedexCenter().getY()), "Bike-1", null, 4);
+        api.addMarker(getMapLocation(52.221196, f2.getFeedexCenter().getX()), getMapLocation(21.008069, f2.getFeedexCenter().getY()), "Bike-1", null, 4);*/
 
 
     }
+
 
     static void startMainContainer() {
         jade.core.Runtime runtime = jade.core.Runtime.instance();
@@ -93,5 +144,7 @@ public class FeedexMain {
 
         containerController = runtime.createMainContainer(profile);
     }
-
+    static double getMapLocation(double center, int loc){
+        return center + (0.03 * (loc - 50));
+    }
 }

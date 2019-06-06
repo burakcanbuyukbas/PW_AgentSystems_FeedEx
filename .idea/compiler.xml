@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="FeedEx" target="1.5" />
+      <module name="FeedEx" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>
